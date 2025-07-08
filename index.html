@@ -84,31 +84,42 @@
     setInterval(draw, 50);
   </script>
 
-  <!-- 🎆 Efecto pirotecnia al tocar -->
-  <script>
-    document.addEventListener('click', (e) => {
+  <!-- 🎆 NUEVO efecto pirotecnia estrellas fugaces -->
+<script>
+  document.addEventListener('click', (e) => {
+    const cantidad = 8; // Número de "Te amo" que salen por toque
+
+    for (let i = 0; i < cantidad; i++) {
       const texto = document.createElement('span');
       texto.textContent = 'Te amo';
       texto.style.position = 'absolute';
       texto.style.left = `${e.clientX}px`;
       texto.style.top = `${e.clientY}px`;
       texto.style.transform = 'translate(-50%, -50%)';
-      texto.style.fontSize = '2em';
+      texto.style.fontSize = '1.5em';
       texto.style.color = '#ff66cc';
       texto.style.textShadow = '0 0 10px #fff, 0 0 20px #ff66cc, 0 0 30px #ff00ff';
       texto.style.opacity = '1';
       texto.style.transition = 'all 1s ease-out';
+      texto.style.pointerEvents = 'none';
       document.body.appendChild(texto);
 
+      const angle = (Math.PI * 2 / cantidad) * i;
+      const distancia = 150;
+
+      const x = Math.cos(angle) * distancia;
+      const y = Math.sin(angle) * distancia;
+
       setTimeout(() => {
-        texto.style.transform += ' scale(2)';
+        texto.style.transform = `translate(${x}px, ${y}px) scale(1.5)`;
         texto.style.opacity = '0';
       }, 10);
 
       setTimeout(() => {
         texto.remove();
-      }, 1000);
-    });
-  </script>
+      }, 1100);
+    }
+  });
+</script>
 </body>
 </html>

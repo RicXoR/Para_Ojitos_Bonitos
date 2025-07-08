@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Para Tanis</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: black;
+      overflow: hidden;
+      font-family: "Comic Sans MS", cursive;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      flex-direction: column;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 3.5em;
+      color: violet;
+      text-shadow: 0 0 20px #ff69b4;
+      text-align: center;
+      z-index: 2;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    span {
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <h1>Te amo con toda mi alma Tanis</h1>
+  <canvas id="cascada"></canvas>
+
+  <!-- 🎵 MÚSICA (coloca el archivo 'perfect.mp3' en esta misma carpeta) -->
+  <audio autoplay loop>
+    <source src="perfect.mp3" type="audio/mpeg">
+    Tu navegador no soporta audio.
+  </audio>
+
+  <!-- 💚 Efecto cascada de 'te adoro' -->
+  <script>
+    const canvas = document.getElementById('cascada');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const texto = 'te adoro ';
+    const letras = texto.split('');
+    const fontSize = 20;
+    const columnas = canvas.width / fontSize;
+    const drops = Array(Math.floor(columnas)).fill(1);
+
+    function draw() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#cc66ff';
+      ctx.font = fontSize + 'px monospace';
+
+      for (let i = 0; i < drops.length; i++) {
+        const letra = letras[Math.floor(Math.random() * letras.length)];
+        ctx.fillText(letra, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height || Math.random() > 0.95) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    setInterval(draw, 50);
+  </script>
+
+  <!-- 🎆 Efecto pirotecnia al tocar -->
+  <script>
+    document.addEventListener('click', (e) => {
+      const texto = document.createElement('span');
+      texto.textContent = 'Te amo';
+      texto.style.position = 'absolute';
+      texto.style.left = `${e.clientX}px`;
+      texto.style.top = `${e.clientY}px`;
+      texto.style.transform = 'translate(-50%, -50%)';
+      texto.style.fontSize = '2em';
+      texto.style.color = '#ff66cc';
+      texto.style.textShadow = '0 0 10px #fff, 0 0 20px #ff66cc, 0 0 30px #ff00ff';
+      texto.style.opacity = '1';
+      texto.style.transition = 'all 1s ease-out';
+      document.body.appendChild(texto);
+
+      setTimeout(() => {
+        texto.style.transform += ' scale(2)';
+        texto.style.opacity = '0';
+      }, 10);
+
+      setTimeout(() => {
+        texto.remove();
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

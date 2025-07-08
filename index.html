@@ -3,128 +3,208 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Para Tanis</title>
+  <title>Te Amo ❤️</title>
   <style>
-    body {
+    html, body {
       margin: 0;
-      background-color: black;
+      padding: 0;
       overflow: hidden;
-      font-family: "Comic Sans MS", cursive;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      flex-direction: column;
-      position: relative;
-    }
-
-    h1 {
-      font-size: 3.5em;
-      color: violet;
-      text-shadow: 0 0 20px #ff69b4;
-      text-align: center;
-      z-index: 2;
+      background: #050505; /* Negro extremadamente oscuro */
+      height: 100%;
     }
 
     canvas {
-      position: fixed;
+      position: absolute;
       top: 0;
       left: 0;
       z-index: 1;
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       pointer-events: none;
     }
 
-    span {
-      z-index: 10;
+    .center-message {
+      font-family: 'Courier New', monospace;
+      color: #ff69b4;
+      font-size: 6vw;
+      text-align: center;
+      opacity: 0.85;
+      text-shadow: 0 0 2px #ff69b4, 0 0 4px #ff1493;
+      animation: aparecer 3s ease-in-out;
+    }
+
+    @keyframes aparecer {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 0.85; transform: scale(1); }
     }
   </style>
 </head>
 <body>
-  <h1>Te amo con toda mi alma Tanis</h1>
-  <canvas id="cascada"></canvas>
 
-  <!-- 🎵 MÚSICA (coloca el archivo 'perfect.mp3' en esta misma carpeta) -->
-  <audio autoplay loop>
-    <source src="perfect.mp3" type="audio/mpeg">
-    Tu navegador no soporta audio.
-  </audio>
+<audio autoplay loop playsinline>
+  <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_f0817cc1aa.mp3?filename=romantic-love-112195.mp3" type="audio/mp3">
+</audio>
 
-  <!-- 💚 Efecto cascada de 'te adoro' -->
-  <script>
-    const canvas = document.getElementById('cascada');
-    const ctx = canvas.getContext('2d');
+<canvas id="canvas"></canvas>
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+<div class="overlay">
+  <div class="center-message">te amo con toda mi alma Tanis</div>
+</div>
 
-    const texto = 'te adoro ';
-    const letras = texto.split('');
-    const fontSize = 20;
-    const columnas = canvas.width / fontSize;
-    const drops = Array(Math.floor(columnas)).fill(1);
-
-    function draw() {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      ctx.fillStyle = '#cc66ff';
-      ctx.font = fontSize + 'px monospace';
-
-      for (let i = 0; i < drops.length; i++) {
-        const letra = letras[Math.floor(Math.random() * letras.length)];
-        ctx.fillText(letra, i * fontSize, drops[i] * fontSize);
-
-        if (drops[i] * fontSize > canvas.height || Math.random() > 0.95) {
-          drops[i] = 0;
-        }
-        drops[i]++;
-      }
-    }
-
-    setInterval(draw, 50);
-  </script>
-
-  <!-- 🎇 Efecto fuegos artificiales sin desvanecerse -->
 <script>
-  document.addEventListener('click', (e) => {
-    const cantidad = 10;
+  const canvas = document.getElementById("canvas");
+  const ctx = canvas.getContext("2d");
+  let width = canvas.width = window.innerWidth;
+  let height = canvas.height = window.innerHeight;
 
-    for (let i = 0; i < cantidad; i++) {
-      const texto = document.createElement('span');
-      texto.textContent = 'Te amo';
-      texto.style.position = 'absolute';
-      texto.style.left = `${e.clientX}px`;
-      texto.style.top = `${e.clientY}px`;
-      texto.style.transform = 'translate(-50%, -50%)';
-      texto.style.fontSize = '1.2em';
-      texto.style.color = '#ff99dd';
-      texto.style.pointerEvents = 'none';
-      texto.style.zIndex = '10';
-      texto.style.transition = 'transform 2.5s linear';
-      texto.style.textShadow = `
-        0 0 8px #fff,
-        0 0 15px #ff99ff,
-        0 0 25px #ff66cc,
-        0 0 50px #ff33aa
-      `;
-      document.body.appendChild(texto);
+  const fontSize = 16;
+  let columns = Math.floor(width / (fontSize * 4));
+  let drops = new Array(columns).fill(1);
 
-      // Dirección aleatoria (como fuegos artificiales)
-      const angle = Math.random() * 2 * Math.PI;
-      const distance = 800 + Math.random() * 200;
-      const x = Math.cos(angle) * distance;
-      const y = Math.sin(angle) * distance;
+  const colors = ['#ff69b4', '#ff1493', '#ffa07a', '#ffc0cb', '#db7093', '#ffb6c1'];
 
-      // Activar movimiento después de insertar
-      setTimeout(() => {
-        texto.style.transform = `translate(${x}px, ${y}px) scale(1.2)`;
-      }, 20);
+  // 🌌 Galaxia de corazones (aumentada a 400 estrellas)
+  const galaxy = [];
+  for (let i = 0; i < 400; i++) {
+    galaxy.push({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      size: Math.random() * 6 + 3,
+      speedX: (Math.random() - 0.5) * 0.3,
+      speedY: (Math.random() - 0.5) * 0.3,
+      opacity: Math.random() * 0.15 + 0.05,
+      color: colors[Math.floor(Math.random() * colors.length)]
+    });
+  }
 
-      // Eliminar después de que haya salido
-      setTimeout(() => {
-        texto.remove();
-      }, 4000); // Opcional: puedes quitar esto si quieres que nunca se eliminen
+  function drawGalaxy() {
+    galaxy.forEach((star) => {
+      star.x += star.speedX;
+      star.y += star.speedY;
+
+      if (star.x < 0) star.x = width;
+      if (star.x > width) star.x = 0;
+      if (star.y < 0) star.y = height;
+      if (star.y > height) star.y = 0;
+
+      ctx.globalAlpha = star.opacity;
+      ctx.font = `${star.size}px monospace`;
+      ctx.fillStyle = star.color;
+      ctx.fillText("❤", star.x, star.y);
+    });
+    ctx.globalAlpha = 1;
+  }
+
+  // ❤️ Corazones flotantes
+  const hearts = [];
+  function createHeart() {
+    hearts.push({
+      x: Math.random() * width,
+      y: height + 20,
+      size: 30 + Math.random() * 20,
+      speed: 1 + Math.random() * 1.5,
+      opacity: 0.5 + Math.random() * 0.5
+    });
+  }
+
+  function drawHearts() {
+    hearts.forEach((h, index) => {
+      ctx.globalAlpha = h.opacity;
+      ctx.font = `${h.size}px monospace`;
+      ctx.fillStyle = '#ff69b4';
+      ctx.fillText("❤", h.x, h.y);
+      h.y -= h.speed;
+      if (h.y < -50) hearts.splice(index, 1);
+    });
+    ctx.globalAlpha = 1;
+  }
+
+  // 🎇 Explosiones con frase "te amoo"
+  const fireworks = [];
+  const fireworkText = "te amoo";
+
+  function createExplosion(x = null, y = null) {
+    const count = fireworkText.length;
+    x = x ?? Math.random() * width;
+    y = y ?? Math.random() * height / 2;
+    for (let i = 0; i < count; i++) {
+      const angle = (Math.PI * 2 * i) / count;
+      const speed = Math.random() * 4 + 2;
+      fireworks.push({
+        x, y,
+        dx: Math.cos(angle) * speed,
+        dy: Math.sin(angle) * speed,
+        alpha: 1,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        text: fireworkText[i],
+        size: 30 + Math.random() * 20
+      });
     }
+  }
+
+  document.body.addEventListener("click", e => {
+    createExplosion(e.clientX, e.clientY);
+  });
+
+  document.body.addEventListener("touchstart", e => {
+    const touch = e.touches[0];
+    createExplosion(touch.clientX, touch.clientY);
+  });
+
+  function drawFireworks() {
+    fireworks.forEach((p, index) => {
+      ctx.globalAlpha = p.alpha;
+      ctx.fillStyle = p.color;
+      ctx.font = `bold ${p.size}px monospace`;
+      ctx.fillText(p.text, p.x, p.y);
+      p.x += p.dx;
+      p.y += p.dy;
+      p.alpha -= 0.02;
+      if (p.alpha <= 0) fireworks.splice(index, 1);
+    });
+    ctx.globalAlpha = 1;
+  }
+
+  function draw() {
+    ctx.fillStyle = "rgba(5, 5, 5, 0.3)"; /* Fondo extremadamente oscuro */
+    ctx.fillRect(0, 0, width, height);
+
+    drawGalaxy();    // Galaxia con más estrellas de corazones
+    drawHearts();
+    drawFireworks();
+
+    if (Math.random() > 0.96) createHeart();
+    if (Math.random() > 0.98) createExplosion();
+
+    for (let i = 0; i < drops.length; i++) {
+      const x = i * fontSize * 4;
+      const y = drops[i] * fontSize;
+      ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+      ctx.font = '16px monospace';
+      ctx.fillText("te adoro", x, y);
+
+      if (y > height && Math.random() > 0.975) drops[i] = 0;
+      drops[i]++;
+    }
+  }
+
+  setInterval(draw, 50);
+
+  window.addEventListener('resize', () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+    columns = Math.floor(width / (fontSize * 4));
+    drops = new Array(columns).fill(1);
   });
 </script>
 </body>
